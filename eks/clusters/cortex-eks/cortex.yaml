@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: external-secret-config
+    - name: external-secrets-config
   interval: 10m # detect drift and undo kubectl edits every 10 minutes
   wait: true # wait for all applied resources to become ready
   retryInterval: 1m # retry every minute on apply or waiting failures
