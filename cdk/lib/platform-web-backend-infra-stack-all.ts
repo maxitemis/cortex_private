@@ -60,6 +60,11 @@ export class PlatformWebBackendInfraAllStack extends cdk.Stack {
       ],
     })
 
+    // Allow access to secrets manager from VPC
+    this.platformVpc.addInterfaceEndpoint('cortex-database-vpc-secrets-manager-endpoint', {
+      service: ec2.InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
+    })
+    
     // Allow database VPC to be reached from EKS VPC
     utils.peerVpcs(this, 'eks-vpc', this.externalResources.eksVpc, 'platform-vpc', this.platformVpc)
   }

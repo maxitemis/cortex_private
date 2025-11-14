@@ -123,7 +123,7 @@ export class DatabaseBlock extends Construct {
     this.databaseInitializerFunctionChangeIndicator = utils.computeFileCollectionHash(functionFiles)
 
     const secretArnPattern =
-        `arn:aws:secretsmanager:${props.env.region}:${props.env.account}:secret:cortex-database-app-secret-*`
+        `arn:aws:secretsmanager:${props.env.region}:${props.env.account}:secret:cortex-database-user-secret-*`
     this.databaseInitializerFunction.addToRolePolicy(
         new iam.PolicyStatement({
           actions: [

@@ -5,6 +5,9 @@ import {DnsStack} from "../lib/dns-stack";
 import {EksStack} from "../lib/eks-stack";
 import {CortexInfraAllStack} from "../lib/cortex-infra-stack-all";
 import {PlatformWebBackendInfraAllStack} from "../lib/platform-web-backend-infra-stack-all";
+import {Account} from "../lib/account";
+import {CortexInfraStack} from "../lib/cortex-infra-stack";
+import {Stage} from "../lib/stage";
 
 const app = new cdk.App();
 
@@ -35,3 +38,22 @@ const cortexAllStack = new CortexInfraAllStack(app, 'cortex-infra-all', {
     env: env,
     platformVpc: platformAllStack.platformVpc,
 })
+
+
+for (const stage of Account.getStages(env.account)) {
+    console.log(
+        `Processing deployments to '${stage}' stage in '${env.region}:${env.account}' environment`,
+    )
+
+
+        // for now only stage and prod are needed
+        new CortexInfraStack(app, `cortex-infra-${stage}`, {
+            env: env,
+            stage,
+            databaseBlock: cortexAllStack.databaseBlock,
+            //ciAgentGpgSecretKeyParameterAccessPolicy: clusterAllStack.ciAgentGpgSecretKeyParameterAccessPolicy,
+            //slackAlertsWebhookUrlParameterAccessPolicy:
+            //    clusterAllStack.slackAlertsWebhookUrlParameterAccessPolicies['cortex'],
+        })
+    
+}

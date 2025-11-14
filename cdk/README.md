@@ -13,3 +13,46 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 * `cdk deploy`      deploy this stack to your default AWS account/region
 * `cdk diff`        compare deployed stack with current state
 * `cdk synth`       emits the synthesized CloudFormation template
+
+## Todo after Eks stack is deployed 
+
+- create oidc provider
+- update VPC and oidc provided names in external resource block
+
+````
+export ACCOUNT_ID=676045246387
+export REGION=eu-central-1
+export CLUSTER_NAME=cortex-eks
+
+aws eks update-kubeconfig --name cortex-eks --region eu-central-1
+eksctl utils associate-iam-oidc-provider \
+  --cluster cortex-eks \
+  --region eu-central-1 \
+  --approve
+
+export VPC_ID=$(aws eks describe-cluster --name "$CLUSTER_NAME" --region "$REGION" \
+  --query "cluster.resourcesVpcConfig.vpcId" --output text)
+
+vpc-081d7dce746ab2817
+
+aws ec2 describe-vpcs --query "Vpcs[*].{ID:VpcId,CIDR:CidrBlock}" --output table
+
+aws eks describe-cluster --name "$CLUSTER_NAME" --region "$REGION" \
+  --query "cluster.identity.oidc.issuer" --output text
+
+https://oidc.eks.eu-central-1.amazonaws.com/id/C95AC525CACA8B4AB4295EB4B430B655
+
+
+````
+
+## deploy external resource stack
+
+`cdk deploy platform-web-backend-infra-all`
+
+## deploy cortex all stack
+
+`cdk deploy cortex-infra-all`
+
+## deploy cortex stage
+
+## deploy cortex dev

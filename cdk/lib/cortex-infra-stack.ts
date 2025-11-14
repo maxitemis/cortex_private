@@ -12,8 +12,8 @@ import { Stage, StagedStackProps } from './stage'
 
 export interface CortexInfraProps extends StagedStackProps {
   databaseBlock: DatabaseBlock
-  ciAgentGpgSecretKeyParameterAccessPolicy: iam.ManagedPolicy
-  slackAlertsWebhookUrlParameterAccessPolicy: iam.ManagedPolicy
+  //ciAgentGpgSecretKeyParameterAccessPolicy: iam.ManagedPolicy
+  //slackAlertsWebhookUrlParameterAccessPolicy: iam.ManagedPolicy
   env: Environment
 }
 
@@ -63,23 +63,26 @@ export class CortexInfraStack extends cdk.Stack {
   }
 
   createServiceAccountRoles(props: CortexInfraProps): void {
-    new FluxServiceAccountRolesBlock(this, 'flux-service-account-roles-block', {
-      stage: this.stage,
-      appGroupName: 'cortex',
-      openIdConnectProvider: this.externalResources.openIdConnectProvider,
-      ciAgentGpgSecretKeyParameterAccessPolicy: props.ciAgentGpgSecretKeyParameterAccessPolicy,
-      slackAlertsWebhookUrlParameterAccessPolicy: props.slackAlertsWebhookUrlParameterAccessPolicy,
-    })
+    //new FluxServiceAccountRolesBlock(this, 'flux-service-account-roles-block', {
+    //  stage: this.stage,
+    //  appGroupName: 'cortex',
+    //  openIdConnectProvider: this.externalResources.openIdConnectProvider,
+    //  ciAgentGpgSecretKeyParameterAccessPolicy: props.ciAgentGpgSecretKeyParameterAccessPolicy,
+    //  slackAlertsWebhookUrlParameterAccessPolicy: props.slackAlertsWebhookUrlParameterAccessPolicy,
+    //})
 
     const secretManagerAccessPolicy = new iam.Policy(this, 'secret-manager-access-policy', {
       statements: [
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
           actions: [
-            `arn:aws:secretsmanager:${props.env.region}:${props.env.account}:secret:cortex-database-app-secret-${this.stage}*`,
+            'secretsmanager:GetSecretValue',
+            'secretsmanager:DescribeSecret',
+          ],
+          resources: [
+            `arn:aws:secretsmanager:${props.env.region}:${props.env.account}:secret:cortex-database-user-secret-${this.stage}*`,
             `arn:aws:secretsmanager:${props.env.region}:${props.env.account}:secret:cortex-database-secret-*`,
           ],
-          resources: ['*'],
         }),
       ],
     })

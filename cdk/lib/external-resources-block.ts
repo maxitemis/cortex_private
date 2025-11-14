@@ -9,7 +9,7 @@ import { Construct } from 'constructs'
 import { Account } from './account'
 
 export class ExternalResourcesBlock extends Construct {
-  //stack: cdk.Stack
+  stack: cdk.Stack
   //apigatewayPrincipal: iam.ServicePrincipal
   //hostedZone: route53.IHostedZone
   //networkLoadBalancer: elbv2.INetworkLoadBalancer
@@ -21,7 +21,7 @@ export class ExternalResourcesBlock extends Construct {
 
   constructor(scope: Construct, id: string) {
     super(scope, id)
-    //this.stack = cdk.Stack.of(scope)
+    this.stack = cdk.Stack.of(scope)
 
     //this.defineServicePrincipals()
     this.defineGlobalResources()
@@ -72,20 +72,18 @@ export class ExternalResourcesBlock extends Construct {
   //    },
   //  )
 //
-  //  this.openIdConnectProvider = eks.OpenIdConnectProvider.fromOpenIdConnectProviderArn(
-  //    this,
-  //    'openid-connect-provider',
-  //    Account.isProduction(this.stack.account)
-  //      ? `arn:aws:iam::${this.stack.account}:oidc-provider/oidc.eks.${this.stack.region}.amazonaws.com/id/AC73334D30E51BA1E43668F7FE777F21`
-  //      : `arn:aws:iam::${this.stack.account}:oidc-provider/oidc.eks.${this.stack.region}.amazonaws.com/id/BFFA0A7ED89614F9F2F940E2C838EF9B`,
-  //  )
-//
+    this.openIdConnectProvider = eks.OpenIdConnectProvider.fromOpenIdConnectProviderArn(
+      this,
+      'openid-connect-provider',
+      `arn:aws:iam::${this.stack.account}:oidc-provider/oidc.eks.eu-central-1.amazonaws.com/id/C95AC525CACA8B4AB4295EB4B430B655`,
+    )
+
     this.defaultVpc = ec2.Vpc.fromLookup(this, 'default-vpc', {
       isDefault: true,
     })
 //
     this.eksVpc = ec2.Vpc.fromLookup(this, 'eks-vpc', {
-      vpcName: 'eksctl-itemis-solutions-plane-cluster/VPC',
+      vpcId: 'vpc-081d7dce746ab2817',
     })
 //
   //  if (Account.isProduction(this.stack.account)) {
