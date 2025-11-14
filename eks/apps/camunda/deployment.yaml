@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: camunda
+  namespace: camunda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: camunda
+  template:
+    metadata:
+      labels:
+        app: camunda
+    spec:
+      containers:
+        - name: camunda
+          image: operaton/operaton:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: camunda-db
+                  key: DB_HOST
+            - name: DB_DRIVER
+              value: com.mysql.cj.jdbc.Driver
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: camunda-db
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: camunda-db
+                  key: DB_PASSWORD
+            - name: TZ
+              value: Europe/Berlin
+          args:
+            - /bin/sh
+            - -c
+            - |
+              export DB_URL="jdbc:mysql://${DB_HOST}:3306/camunda?autoReconnect=true&sessionVariables=transaction_isolation='READ-COMMITTED'"
+              echo "🔧 Using DB_URL=${DB_URL}"
+              exec ./operaton.sh           
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
