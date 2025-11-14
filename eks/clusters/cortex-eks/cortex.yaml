@@ -1,0 +1,33 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps-cortex-stage
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: external-secret-config
+  interval: 10m # detect drift and undo kubectl edits every 10 minutes
+  wait: true # wait for all applied resources to become ready
+  retryInterval: 1m # retry every minute on apply or waiting failures
+  timeout: 5m # give up waiting after 5 minutes
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  path: ./eks/apps/cortex/overlays/cortex-stage
+  prune: true # remove stale resources from cluster
+  force: true # recreate resources on immutable fields changes
+  postBuild:
+    # Note: The name of a variable can contain only alphanumeric and underscore characters.
+    # The controller validates the variable names using this regular expression: ^[_[:alpha:]][_[:alpha:][:digit:]]*$.
+    substitute:
+      app_group_name: cortex
+      app_group_name_upper_case: CORTEX
+      app_name: cortex
+      source_branch: construction
+      aws_account_id: "676045246387"
+      region: eu-central-1
+      stage: stage
+      stage_upper_case: STAGE
+      cortex_host: cortex.syngit.de
+      certificate_arn: tbd
