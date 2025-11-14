@@ -89,3 +89,16 @@ https://oidc.eks.eu-central-1.amazonaws.com/id/C95AC525CACA8B4AB4295EB4B430B655
 ## deploy cortex stage
 
 ## deploy cortex dev
+
+
+- bootstrap cluster:
+  - `export GITHUB_TOKEN=ghp_IpxaPvz69U....`
+  - `
+    flux bootstrap github \
+  --owner=maxitemis \
+  --repository=cortex_private \
+  --branch=main \
+  --path=eks/clusters/cortex-eks \
+  --personal \
+  --namespace=flux-system
+    `

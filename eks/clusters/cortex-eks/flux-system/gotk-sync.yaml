@@ -11,7 +11,7 @@ spec:
     branch: main
   secretRef:
     name: flux-system
-  url: ssh://git@github.com/maxistar/infra-gitops-guide-cms
+  url: ssh://git@github.com/maxitemis/cortex_private
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./clusters/cortex-eks
+  path: ./eks/clusters/cortex-eks
   prune: true
   sourceRef:
     kind: GitRepository
