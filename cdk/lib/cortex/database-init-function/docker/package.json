@@ -1,0 +1,18 @@
+{
+  "name": "cortex-database-initializer",
+  "version": "1.0.0",
+  "description": "Provisions and initializes CORTEX database for specified stage in AWS RDS",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Pivate",
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.750.0",
+    "cfn-response": "^1.0.1",
+    "mysql2": "3.14.2"
+  }
+}

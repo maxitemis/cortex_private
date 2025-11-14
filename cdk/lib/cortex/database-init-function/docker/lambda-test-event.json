@@ -1,0 +1,10 @@
+{
+  "ResourceProperties": {
+    "databaseHost": "analyze-snapshot-viewer-database.cbamb8kkxujn.eu-central-1.rds.amazonaws.com",
+    "databaseSecretName": "arn:aws:secretsmanager:eu-central-1:144417869684:secret:analyze-database-secret-crCxKN",
+    "appDatabaseSecretName": "arn:aws:secretsmanager:eu-central-1:144417869684:secret:analyze-database-secret-crCxKN",
+    "appDatabaseName": "analyze-sand",
+    "stage": "sand"
+  },
+  "RequestType": "Create"
+}
