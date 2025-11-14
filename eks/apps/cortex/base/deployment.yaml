@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cortex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cortex
+  template:
+    metadata:
+      labels:
+        app: cortex
+    spec:
+      containers:
+        - name: cortex
+          image: operaton/operaton:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: cortex-db
+                  key: DB_URL
+            - name: DB_DRIVER
+              value: com.mysql.cj.jdbc.Driver
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cortex-db
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cortex-db
+                  key: DB_PASSWORD
+            - name: TZ
+              value: Europe/Berlin
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
