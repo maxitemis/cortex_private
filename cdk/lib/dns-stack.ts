@@ -8,10 +8,13 @@ export interface DnsStackProps extends StackProps {
      * Имя поддомена, например "operaton.ztools.org"
      */
     domainName: string;
+
+    devDomainName: string;
 }
 
 /**
  * Стек DNS и SSL-сертификата для operaton.ztools.org
+ * aws acm list-certificates --region eu-central-1
  */
 export class DnsStack extends Stack {
     public readonly certificateArn: string;
@@ -24,12 +27,18 @@ export class DnsStack extends Stack {
         // Предполагаем, что Hosted Zone "operaton.ztools.org" уже создана в Route 53
         // (либо вручную, либо через aws route53 create-hosted-zone)
         const zone = HostedZone.fromLookup(this, 'OperatonZone', {
-            domainName: props.domainName,
+            domainName: 'syngit.de',
         });
 
         // Выпускаем сертификат ACM (используется для HTTPS в ALB/Ingress)
         const certificate = new Certificate(this, 'OperatonCert', {
             domainName: props.domainName,
+            validation: CertificateValidation.fromDns(zone),
+        });
+
+        // Выпускаем сертификат ACM (используется для HTTPS в ALB/Ingress)
+        const certificate2 = new Certificate(this, 'OperatonDevCert', {
+            domainName: props.devDomainName,
             validation: CertificateValidation.fromDns(zone),
         });
 
