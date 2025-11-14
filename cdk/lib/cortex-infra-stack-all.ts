@@ -24,14 +24,14 @@ export class CortexInfraAllStack extends cdk.Stack {
     cdk.Tags.of(this).add('stage', 'all')
 
     this.externalResources = new ExternalResourcesBlock(
-      this,
-      `external-resources-block`,
+        this,
+        `external-resources-block`,
     )
 
     this.platformVpc = props.platformVpc
     this.databaseBlock = this.createDatabaseInstance(props)
   }
-  
+
   createDatabaseInstance(props: cdk.StackProps): DatabaseBlock {
     const databaseBlock = new DatabaseBlock(this, 'cortex-database', {
       databaseVpc: this.platformVpc,

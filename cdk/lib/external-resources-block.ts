@@ -15,8 +15,8 @@ export class ExternalResourcesBlock extends Construct {
   //networkLoadBalancer: elbv2.INetworkLoadBalancer
   //publicNetworkLoadBalancer: elbv2.INetworkLoadBalancer
   openIdConnectProvider: iam.IOpenIdConnectProvider
-  //defaultVpc: ec2.IVpc
-  //eksVpc: ec2.IVpc
+  defaultVpc: ec2.IVpc
+  eksVpc: ec2.IVpc
   //comCertificate?: cdk.aws_certificatemanager.ICertificate
 
   constructor(scope: Construct, id: string) {
@@ -24,14 +24,14 @@ export class ExternalResourcesBlock extends Construct {
     //this.stack = cdk.Stack.of(scope)
 
     //this.defineServicePrincipals()
-    //this.defineGlobalResources()
+    this.defineGlobalResources()
   }
 
   //defineServicePrincipals(): void {
   //  this.apigatewayPrincipal = new iam.ServicePrincipal('apigateway.amazonaws.com')
   //}
 
-  //defineGlobalResources(): void {
+  defineGlobalResources(): void {
   //  this.hostedZone = route53.HostedZone.fromLookup(
   //    this,
   //    'hosted-zone',
@@ -80,13 +80,13 @@ export class ExternalResourcesBlock extends Construct {
   //      : `arn:aws:iam::${this.stack.account}:oidc-provider/oidc.eks.${this.stack.region}.amazonaws.com/id/BFFA0A7ED89614F9F2F940E2C838EF9B`,
   //  )
 //
-  //  this.defaultVpc = ec2.Vpc.fromLookup(this, 'default-vpc', {
-  //    isDefault: true,
-  //  })
+    this.defaultVpc = ec2.Vpc.fromLookup(this, 'default-vpc', {
+      isDefault: true,
+    })
 //
-  //  this.eksVpc = ec2.Vpc.fromLookup(this, 'eks-vpc', {
-  //    vpcName: 'eksctl-itemis-solutions-plane-cluster/VPC',
-  //  })
+    this.eksVpc = ec2.Vpc.fromLookup(this, 'eks-vpc', {
+      vpcName: 'eksctl-itemis-solutions-plane-cluster/VPC',
+    })
 //
   //  if (Account.isProduction(this.stack.account)) {
   //    this.comCertificate = certificatemanager.Certificate.fromCertificateArn(
@@ -95,5 +95,5 @@ export class ExternalResourcesBlock extends Construct {
   //      `arn:aws:acm:${this.stack.region}:679671425266:certificate/f6ed636e-698c-4a88-8498-d6b185f32d67`,
   //    )
   //  }
-  //}
+  }
 }
