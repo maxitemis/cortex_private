@@ -28,7 +28,7 @@ spec:
       stage: stage
       stage_upper_case: STAGE
       cortex_host: cortex.syngit.de
-      certificate_arn: tbd
+      certificate_arn: arn:aws:acm:eu-central-1:676045246387:certificate/5c8d83b5-c0cb-4c1c-9234-4b46dfb599f3
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -60,4 +60,4 @@ spec:
       stage: dev
       stage_upper_case: DEV
       cortex_host: cortex.dev.syngit.de
-      certificate_arn: tbd
+      certificate_arn: arn:aws:acm:eu-central-1:676045246387:certificate/7c971cb9-5c78-4a44-bc8c-3b594d3d4668

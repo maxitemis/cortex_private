@@ -120,4 +120,9 @@ kubectl create secret generic cortex-db \
 --from-literal=DB_PASSWORD="Jgn|%V*{I%#\!Xbf02}kiQF}+TyXYI0T0" \
 -n cortex-dev
 
+
+kubectl -n cortex-stage port-forward service/cortex-svc 8080:80
+kubectl -n cortex-dev port-forward service/cortex-svc 8080:80
+kubectl -n cortex-stage logs camunda-bc6bf4795-hklsl
+
 ````
