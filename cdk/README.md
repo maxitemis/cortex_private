@@ -30,10 +30,43 @@ eksctl utils associate-iam-oidc-provider \
   --region eu-central-1 \
   --approve
 
+eksctl create iamserviceaccount \
+  --cluster "$CLUSTER_NAME" \
+  --namespace kube-system \
+  --name aws-load-balancer-controller \
+  --attach-policy-arn "$POLICY_ARN" \
+  --override-existing-serviceaccounts \
+  --region "$REGION" \
+  --approve
+
+
 export VPC_ID=$(aws eks describe-cluster --name "$CLUSTER_NAME" --region "$REGION" \
   --query "cluster.resourcesVpcConfig.vpcId" --output text)
 
 vpc-081d7dce746ab2817
+
+export VPC_ID=$(aws eks describe-cluster --name "$CLUSTER_NAME" --region "$REGION" \
+  --query "cluster.resourcesVpcConfig.vpcId" --output text)
+
+echo $VPC_ID
+
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+
+helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName="$CLUSTER_NAME" \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region="$REGION" \
+  --set replicaCount=1 \
+  --set vpcId="$VPC_ID"
+
+kubectl -n kube-system get pods -l app.kubernetes.io/name=aws-load-balancer-controller
+
+kubectl -n kube-system get deploy aws-load-balancer-controller
+kubectl -n kube-system rollout status deploy/aws-load-balancer-controller
+kubectl -n kube-system logs deploy/aws-load-balancer-controller | tail -n 50  
 
 aws ec2 describe-vpcs --query "Vpcs[*].{ID:VpcId,CIDR:CidrBlock}" --output table
 
