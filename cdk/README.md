@@ -108,9 +108,16 @@ https://oidc.eks.eu-central-1.amazonaws.com/id/C95AC525CACA8B4AB4295EB4B430B655
 kubectl delete secret cortex-db -n cortex-stage
 
 kubectl create secret generic cortex-db \
---from-literal=DB_URL="jdbc:mysql://cortex-stage.cx46wy8gajkf.eu-central-1.rds.amazonaws.com:3306/camunda?autoReconnect=true&sessionVariables=transaction_isolation='READ-COMMITTED'" \
+--from-literal=DB_URL="jdbc:mysql://cortex.cx46wy8gajkf.eu-central-1.rds.amazonaws.com:3306/cortex-stage?autoReconnect=true&sessionVariables=transaction_isolation='READ-COMMITTED'" \
 --from-literal=DB_USER="User-stage" \
 --from-literal=DB_PASSWORD="4U4f(PVs|o(\!P2s\!Yd3ymoB0%<%fw&AU" \
 -n cortex-stage
+
+
+kubectl create secret generic cortex-db \
+--from-literal=DB_URL="jdbc:mysql://cortex.cx46wy8gajkf.eu-central-1.rds.amazonaws.com:3306/cortex-dev?autoReconnect=true&sessionVariables=transaction_isolation='READ-COMMITTED'" \
+--from-literal=DB_USER="User-dev" \
+--from-literal=DB_PASSWORD="Jgn|%V*{I%#\!Xbf02}kiQF}+TyXYI0T0" \
+-n cortex-dev
 
 ````
